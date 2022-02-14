@@ -31,6 +31,10 @@ namespace Sistema.Web
             services.AddControllers();
 			services.AddDbContext<DbContextSistema>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Conexion")));
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "Todos", builder => builder.WithOrigins("*").WithHeaders("*").WithMethods("*"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,9 +45,11 @@ namespace Sistema.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("Todos");
 
             app.UseAuthorization();
 
