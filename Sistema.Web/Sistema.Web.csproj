@@ -13,5 +13,9 @@
     <ProjectReference Include="..\Sistema.Entidades\Sistema.Entidades.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Ventas\" />
+  </ItemGroup>
+
 
 </Project>
