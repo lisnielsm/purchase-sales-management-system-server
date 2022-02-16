@@ -11,6 +11,7 @@ namespace Sistema.Datos
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Articulo> Articulos { get; set; }
         public DbSet<Rol> Roles{ get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
 
         public DbContextSistema(DbContextOptions<DbContextSistema> options) : base(options)
         {
@@ -23,6 +24,7 @@ namespace Sistema.Datos
             modelBuilder.ApplyConfiguration(new CategoriaMap());
             modelBuilder.ApplyConfiguration(new ArticuloMap());
             modelBuilder.ApplyConfiguration(new RolMap());
+            modelBuilder.ApplyConfiguration(new UsuarioMap());
         }
     }
 }
