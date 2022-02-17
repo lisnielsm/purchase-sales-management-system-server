@@ -6,6 +6,7 @@ namespace Sistema.Entidades.Usuarios
 {
     public class Usuario
     {
+        [Key]
         public int idusuario { get; set; }
         [Required]
         public int idrol { get; set; }

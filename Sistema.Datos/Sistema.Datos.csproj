@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Sistema.Entidades\Sistema.Entidades.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mapping\Ventas\" />
-  </ItemGroup>
-
 </Project>

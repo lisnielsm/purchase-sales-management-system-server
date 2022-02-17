@@ -12,7 +12,7 @@ namespace Sistema.Datos.Mapping.Usuarios
             builder.ToTable("usuario").HasKey(u => u.idusuario);
             builder.HasOne(u => u.rol)
                     .WithMany(r => r.usuarios)
-                    .HasForeignKey(u => u.idusuario);
+                    .HasForeignKey(u => u.idrol);
         }
     }
 }

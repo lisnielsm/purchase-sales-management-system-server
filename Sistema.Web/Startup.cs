@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,10 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Sistema.Datos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Sistema.Web
@@ -29,11 +32,36 @@ namespace Sistema.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-			services.AddDbContext<DbContextSistema>(options =>
+
+            services.AddDbContext<DbContextSistema>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Conexion")));
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "Todos", builder => builder.WithOrigins("*").WithHeaders("*").WithMethods("*"));
+            });
+
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
             });
         }
 
@@ -50,6 +78,8 @@ namespace Sistema.Web
             app.UseRouting();
 
             app.UseCors("Todos");
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
